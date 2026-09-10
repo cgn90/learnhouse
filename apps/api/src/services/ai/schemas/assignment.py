@@ -11,9 +11,10 @@ Task-type source of truth: ``src/db/courses/assignments.py`` +
 ``src/services/courses/activities/assignments.py`` (the graders).
 """
 
+import json
 from typing import List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 # The subset of AssignmentTaskTypeEnum the AI can generate. CODE (Judge0 test
 # cases) and CUSTOM/OTHER (headless) are intentionally excluded — they need
@@ -93,7 +94,16 @@ class AIAssignmentPlan(BaseModel):
         "ALPHABET", "NUMERIC", "PERCENTAGE", "PASS_FAIL", "GPA_SCALE"
     ] = "PERCENTAGE"
     tasks: List[AITask] = Field(default_factory=list)
-
+     @field_validator("tasks", mode="before")
+    @classmethod
+    def parse_serialized_tasks(cls, value):
+        # Algunos modelos devuelven el array como texto JSON.
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except json.JSONDecodeError:
+                pass
+        return value
 
 # --- Request / response ---
 

@@ -94,7 +94,7 @@ class AIAssignmentPlan(BaseModel):
         "ALPHABET", "NUMERIC", "PERCENTAGE", "PASS_FAIL", "GPA_SCALE"
     ] = "PERCENTAGE"
     tasks: List[AITask] = Field(default_factory=list)
-     @field_validator("tasks", mode="before")
+    @field_validator("tasks", mode="before")
     @classmethod
     def parse_serialized_tasks(cls, value):
         # Algunos modelos devuelven el array como texto JSON.

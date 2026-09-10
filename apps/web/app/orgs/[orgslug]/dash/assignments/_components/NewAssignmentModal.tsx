@@ -82,7 +82,7 @@ export default function NewAssignmentModal({
                 <button
                   key={c.course_uuid}
                   onClick={() => {
-                    setSelectedCourseUuid(cleanCourseUuid(c.course_uuid))
+                    setSelectedCourseUuid(c.course_uuid)
                     setStep('chapter')
                   }}
                   className={rowBtn}
